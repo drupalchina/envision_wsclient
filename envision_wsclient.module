@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * @file
+ * Web service client examples module.
+ */
+/**
+ * Implements hook_menu().
+ */
+function envision_wsclient_menu() {
+  $items['test/restful'] = array(
+    'page callback' => 'exec_wsclient',
+    'page arguments' => array(1),
+	'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['test/restfulserver'] = array(
+    'page callback' => 'exec_wsserver',
+    'page arguments' => array(1),
+	'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  
+    $items['test/testrestfulserver'] = array(
+    'page callback' => 'exec_testwsserver',
+    'page arguments' => array(1),
+	'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+function exec_wsclient(){
+  $service = wsclient_service_load('envision_creagevapp');
+  
+  $curl_options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
+  $curl_options[CURLOPT_USERPWD] = "corp\XINHUANG:Password003#";
+  $service->settings['curl options'] = $curl_options;
+  
+  try {
+    $result = $service->create('envision');
+  }catch (WSClientException $e) {
+     print($e->__toString());
+  }
+  print('retult<br>');
+  print_r($result);
+  return;
+}
+
+
+function exec_wsserver(){
+  print('123');
+  return;
+}
+
+function exec_testwsserver(){
+  $service = wsclient_service_load('test');
+
+  try {
+    $result = $service->create('envision');
+  }catch (WSClientException $e) {
+     print($e->__toString());
+  }
+  print('retult<br>');
+  print($result);
+  return;
+}
+
+
+
+
+/**
+ * Implements hook_default_wsclient_service().
+ */
+function envision_wsclient_default_wsclient_service() {
+
+  $service = new WSClientServiceDescription();
+  $service->name = 'envision_creagevapp';
+  $service->label = 'Envision creagevApp';
+  $service->url = 'http://218.4.19.204:8081/envision/restful/';
+  $service->type = 'rest';
+
+  // Add info about the REST service, which the user has to provide via the UI.
+  $service->datatypes = array(
+    'return_result' => array(
+      'label' => 'Return Result',
+      'property info' => array(
+        'responseData' => array(
+          'type' => 'text',
+          'label' => 'Return Result'
+        ),
+      ),
+    ),
+  );
+  
+  $operation['label'] = 'Create';
+  $operation['url'] = 'createvApp';
+  $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+
+
+  $service->operations['create'] = $operation;
+  $services[$service->name] = $service;
+  //debug($service);
+  
+  //test
+    $service = new WSClientServiceDescription();
+  $service->name = 'test';
+  $service->label = 'Test';
+  $service->url = 'http://127.0.0.1/commerce_kickstart/test/';
+  $service->type = 'rest';
+
+  // Add info about the REST service, which the user has to provide via the UI.
+  $service->datatypes = array(
+    'return_result' => array(
+      'label' => 'Return Result',
+      'property info' => array(
+        'responseData' => array(
+          'type' => 'text',
+          'label' => 'Return Result'
+        ),
+      ),
+    ),
+  );
+  
+  $operation['label'] = 'Test';
+  $operation['url'] = 'restfulserver';
+  $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $service->operations['create'] = $operation;
+  $services[$service->name] = $service;
+  //test end
+  
+  return $services;
+}
