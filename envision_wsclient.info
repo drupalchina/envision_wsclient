@@ -1,6 +1,7 @@
 name = Envision Web service client
 description = Define webservice description,call webservice.
 package = Envision modules
+files [] = envision_wsclient.test.inc
 core = 7.x
 dependencies[] = wsclient_rest
 

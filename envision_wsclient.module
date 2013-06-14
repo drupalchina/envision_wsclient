@@ -4,72 +4,40 @@
  * @file
  * Web service client examples module.
  */
+
+/**
+ * Implements hook_commerce_checkout_page_info().
+ */
+function envision_wsclient_commerce_checkout_page_info() {
+  $checkout_pages = array();
+
+  $checkout_pages['checkout_to_webservice'] = array(
+    'name' => t('checkout to webservice'),
+    'title' => t('Connect to remote server'),
+    'weight' => 5,
+    'status_cart' => TRUE,
+    'buttons' => TRUE,
+  );
+
+  return $checkout_pages;
+}
+
+
+
 /**
  * Implements hook_menu().
  */
 function envision_wsclient_menu() {
   $items['test/restful'] = array(
     'page callback' => 'exec_wsclient',
+    'file' => 'envision_wsclient.test.inc',
     'page arguments' => array(1),
-	'access callback' => TRUE,
+    'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-  
-  $items['test/restfulserver'] = array(
-    'page callback' => 'exec_wsserver',
-    'page arguments' => array(1),
-	'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  
-    $items['test/testrestfulserver'] = array(
-    'page callback' => 'exec_testwsserver',
-    'page arguments' => array(1),
-	'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  
+
   return $items;
 }
-
-function exec_wsclient(){
-  $service = wsclient_service_load('envision_creagevapp');
-  
-  $curl_options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
-  $curl_options[CURLOPT_USERPWD] = "corp\XINHUANG:Password003#";
-  $service->settings['curl options'] = $curl_options;
-  
-  try {
-    $result = $service->create('envision');
-  }catch (WSClientException $e) {
-     print($e->__toString());
-  }
-  print('retult<br>');
-  print_r($result);
-  return;
-}
-
-
-function exec_wsserver(){
-  print('123');
-  return;
-}
-
-function exec_testwsserver(){
-  $service = wsclient_service_load('test');
-
-  try {
-    $result = $service->create('envision');
-  }catch (WSClientException $e) {
-     print($e->__toString());
-  }
-  print('retult<br>');
-  print($result);
-  return;
-}
-
-
-
 
 /**
  * Implements hook_default_wsclient_service().
@@ -98,6 +66,7 @@ function envision_wsclient_default_wsclient_service() {
   $operation['label'] = 'Create';
   $operation['url'] = 'createvApp';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $operation['type']='POST';
 
 
   $service->operations['create'] = $operation;
