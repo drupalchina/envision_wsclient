@@ -10,7 +10,7 @@
  * Checkout pane callback: returns the shipping service pane's settings form.
  */
 function envision_wsclient_pane_settings_form($checkout_pane) {
-  dpm($checkout_pane);
+//   dpm($checkout_pane);
 }
 
 /**
@@ -18,8 +18,36 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   // Ensure this include file is loaded when the form is rebuilt from the cache.
-  //dpm($form);
+//   dpm($order);
+  $result = call_envision_webservice($order);
   
+  dpm($result===NULL?'null':$result);
+  
+  $pane_form = array(
+    '#prefix' => '<div id="content-from-webservice">',
+    '#suffix' => '</div>',
+  );
+  
+  
+  $pane_form['result'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Call Result'),
+    '#default_value' => 'hello',
+  );
+  
+  return $pane_form;
+  
+}
+
+function call_envision_webservice($order){
+  $service = wsclient_service_load('envision_creagevapp');
+  
+  try {
+    $result = $service->create('test3','new-uploaded');
+  }catch (WSClientException $e) {
+    drupal_set_message($e->__toString(),'error');
+  }
+  return $result;
 }
 
 /**
@@ -73,5 +101,5 @@ function envision_wsclient_pane_checkout_form_submit($form, &$form_state, $check
  * Checkout pane callback: show the selected shipping service on the review pane.
  */
 function envision_wsclient_pane_review($form, $form_state, $checkout_pane, $order) {
-
+  
 }
