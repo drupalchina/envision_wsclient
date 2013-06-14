@@ -14,7 +14,7 @@ function envision_wsclient_commerce_checkout_page_info() {
   $checkout_pages['checkout_to_webservice'] = array(
     'name' => t('checkout to webservice'),
     'title' => t('Connect to remote server'),
-    'weight' => 5,
+    'weight' => 4,
     'buttons' => TRUE,
   );
 
@@ -27,12 +27,12 @@ function envision_wsclient_commerce_checkout_page_info() {
 function envision_wsclient_commerce_checkout_pane_info() {
   $checkout_panes = array();
 
-  $checkout_panes['commerce_shipping'] = array(
-    'title' => t('Shipping service'),
+  $checkout_panes['envision_wsclient'] = array(
+    'title' => t('Envision WSClient'),
     'base' => 'envision_wsclient_pane',
-    'file' => 'envision_wsclient.checkout_pane.inc',
-    'page' => 'call webservice',
-    'weight' => 2,
+    'file' => 'includes/envision_wsclient.checkout_pane.inc',
+    'page' => 'checkout_to_webservice',
+    'weight' => 3,
     'review' => FALSE,
   );
 
