@@ -82,6 +82,11 @@ function envision_wsclient_default_wsclient_service() {
   $operation['label'] = 'Create';
   $operation['url'] = 'createvApp';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
+  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
+  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
+  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
+  $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
   $operation['type']='POST';
 
 
@@ -89,37 +94,6 @@ function envision_wsclient_default_wsclient_service() {
   $services[$service->name] = $service;
   //debug($service);
   
-  //test
-    $service = new WSClientServiceDescription();
-  $service->name = 'test';
-  $service->label = 'Test';
-  $service->url = 'http://127.0.0.1/commerce_kickstart/test/';
-  $service->type = 'rest';
-
-  // Add info about the REST service, which the user has to provide via the UI.
-  $service->datatypes = array(
-    'return_result' => array(
-      'label' => 'Return Result',
-      'property info' => array(
-        'responseData' => array(
-          'type' => 'text',
-          'label' => 'Return Result'
-        ),
-      ),
-    ),
-  );
-  
-  $operation['label'] = 'Test';
-  $operation['url'] = 'restfulserver';
-  $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
-  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'HireDays');
-  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'VmSize');
-  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'MaxWindQuantity');
-  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'MaxVisitors');
-  $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'TemplateName');
-  $service->operations['create'] = $operation;
-  $services[$service->name] = $service;
-  //test end
   
   return $services;
 }
