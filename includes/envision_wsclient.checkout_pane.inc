@@ -10,7 +10,7 @@
  * Checkout pane callback: returns the shipping service pane's settings form.
  */
 function envision_wsclient_pane_settings_form($checkout_pane) {
-  
+  dpm($checkout_pane);
 }
 
 /**
@@ -18,7 +18,7 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   // Ensure this include file is loaded when the form is rebuilt from the cache.
-
+  //dpm($form);
   
 }
 
