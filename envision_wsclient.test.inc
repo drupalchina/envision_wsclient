@@ -14,7 +14,7 @@ function exec_wsclient(){
   }catch (WSClientException $e) {
      print($e->__toString());
   }
-  print('retult<br>');
+  print('result<br>');
   print_r($result);
   return;
 }

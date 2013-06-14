@@ -15,13 +15,29 @@ function envision_wsclient_commerce_checkout_page_info() {
     'name' => t('checkout to webservice'),
     'title' => t('Connect to remote server'),
     'weight' => 5,
-    'status_cart' => TRUE,
     'buttons' => TRUE,
   );
 
   return $checkout_pages;
 }
 
+/**
+ * Implements hook_commerce_checkout_pane_info().
+ */
+function envision_wsclient_commerce_checkout_pane_info() {
+  $checkout_panes = array();
+
+  $checkout_panes['commerce_shipping'] = array(
+    'title' => t('Shipping service'),
+    'base' => 'envision_wsclient_pane',
+    'file' => 'envision_wsclient.checkout_pane.inc',
+    'page' => 'call webservice',
+    'weight' => 2,
+    'review' => FALSE,
+  );
+
+  return $checkout_panes;
+}
 
 
 /**
@@ -96,6 +112,11 @@ function envision_wsclient_default_wsclient_service() {
   $operation['label'] = 'Test';
   $operation['url'] = 'restfulserver';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'HireDays');
+  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'VmSize');
+  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'MaxWindQuantity');
+  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'MaxVisitors');
+  $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'TemplateName');
   $service->operations['create'] = $operation;
   $services[$service->name] = $service;
   //test end
