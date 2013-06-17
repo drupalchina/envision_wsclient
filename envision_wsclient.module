@@ -82,10 +82,10 @@ function envision_wsclient_default_wsclient_service() {
   $operation['label'] = 'Create';
   $operation['url'] = 'createvApp';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
-//  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
-//  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
-//  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
-//  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
+  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
+  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
+  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
+  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
   $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
   $operation['type']='POST';
 
