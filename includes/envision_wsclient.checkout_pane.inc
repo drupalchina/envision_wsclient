@@ -23,7 +23,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   
 //   dpm($order);
   foreach ($order->commerce_line_items['und'] as $item_id){
-    dpm(call_envision_webservice($item_id).chr(13).chr(13));
+    dpm(call_envision_webservice($item_id));
   }
   
   
