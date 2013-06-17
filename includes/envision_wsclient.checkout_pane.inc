@@ -60,34 +60,37 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   );
   
   foreach($result_list as $result){
+    $tableMessage.=$result['message'].'<br>';
+    $tableData.='<tr>'
+                    .'<td>'.$result['data']['vappName'].'</td>'
+                    .'<td>'.$result['data']['hireDays'].'</td>'
+                    .'<td>'.$result['data']['vms'][0]['name'].'</td>'
+                    .'<td>'.$result['data']['vms'][0]['cpu'].'</td>'
+                    .'<td>'.$result['data']['vms'][0]['os'].'</td>'
+                    .'<td>'.$result['data']['vms'][0]['powerStatus'].'</td>'
+                 .'<tr>'
+                    ;
+  }
     $pane_form[] = array(
       '#type' => 'item',
-      '#title' => t($result['message']),
+      '#title' => t($tableMessage),
       '#markup' => '
-      <table>
-        <tr>
-          <td>Vapp Name</td>
-          <td>Hire Days</td>
-          <td>name</td>
-          <td>cpu</td>
-          <td>os</td>
-          <td>power status</td>
-        </tr>
-        <tr>
-          <td>'.$result['data']['vappName'].'</td>
-          <td>'.$result['data']['hireDays'].'</td>
-          <td>'.$result['data']['vms'][0]['name'].'</td>
-          <td>'.$result['data']['vms'][0]['cpu'].'</td>
-          <td>'.$result['data']['vms'][0]['os'].'</td>
-          <td>'.$result['data']['vms'][0]['powerStatus'].'</td>
-        </tr>
+      <table class="views-table">
+        <thead>
+          <tr>
+            <th>Vapp Name</th>
+            <th>Hire Days</th>
+            <th>name</th>
+            <th>cpu</th>
+            <th>os</th>
+            <th>power status</th>
+          </tr>
+        </thead>
+        <tbody>'.$tableData.'</tbody>
       </table>
       ',
     );
-  }
-  
-  
-  
+ 
   return $pane_form;
   
 }
