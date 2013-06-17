@@ -17,14 +17,37 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  * Checkout pane callback: builds a shipping quote selection form.
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  // Ensure this include file is loaded when the form is rebuilt from the cache.
-//   dpm($order);
-//   $result = call_envision_webservice($order);
   
-//   dpm($order);
+//   $tmpArr = array(
+//     'status'=>'OK',
+//     'code'=>'NONE',
+//     'data'=>array(
+//       'customerName'=>null,
+//       'vappName'=>'test1',
+//       'hireDays'=>'',
+//       'serviceName'=>null,
+//       'vms'=>array(
+//         array(
+//           'name'=>'new-uploaded',
+//           'cpu'=>'hertz * 10^6 X 1',
+//           'os'=>'Microsoft XXX',
+//           'powerStatus'=>'POWERED_OFF',
+//           'network'=>array(),
+//         ),
+//       ),
+//     ),
+//     'message'=>'create vApp \'test1\' successfully',
+//   );
+  
+  
+  $result_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
-    dpm(call_envision_webservice($item_id));
+    $tmpRs = call_envision_webservice($item_id);
+    dpm($tmpRs);
+    array_push($result_list,$tmpRs);
   }
+  
+
   
   
 //   dpm($order);
@@ -36,12 +59,34 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     '#suffix' => '</div>',
   );
   
+  foreach($result_list as $result){
+    $pane_form[] = array(
+      '#type' => 'item',
+      '#title' => t($result['message']),
+      '#markup' => '
+      <table>
+        <tr>
+          <td>Vapp Name</td>
+          <td>Hire Days</td>
+          <td>name</td>
+          <td>cpu</td>
+          <td>os</td>
+          <td>power status</td>
+        </tr>
+        <tr>
+          <td>'.$result['data']['vappName'].'</td>
+          <td>'.$result['data']['hireDays'].'</td>
+          <td>'.$result['data']['vms'][0]['name'].'</td>
+          <td>'.$result['data']['vms'][0]['cpu'].'</td>
+          <td>'.$result['data']['vms'][0]['os'].'</td>
+          <td>'.$result['data']['vms'][0]['powerStatus'].'</td>
+        </tr>
+      </table>
+      ',
+    );
+  }
   
-  $pane_form['result'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Call Result'),
-    '#default_value' => 'hello',
-  );
+  
   
   return $pane_form;
   
