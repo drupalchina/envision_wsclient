@@ -64,6 +64,7 @@ function exec_wsclient(){
     drupal_set_message($e->__toString(),'error');
     $result = $e->__toString();
   }
+  print_r($result);
   return $result;
 }
 
