@@ -61,8 +61,8 @@ function envision_wsclient_menu() {
 function envision_wsclient_default_wsclient_service() {
 
   $service = new WSClientServiceDescription();
-  $service->name = 'envision_creagevapp';
-  $service->label = 'Envision creagevApp';
+  $service->name = 'envision_webservice';
+  $service->label = 'Envision Webservice';
   $service->url = 'http://218.4.19.204:8081/envision/restful/';
   $service->type = 'rest';
 
