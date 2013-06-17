@@ -117,12 +117,12 @@ function call_envision_webservice($item_id){
   $maxVisitors='';
   $templateName='new-uploaded';
   
-//   dpm('serviceName='.$serviceName.chr(13)
-//   .'hireDays='.$hireDays.chr(13)
-//   .'templateName='.$templateName.chr(13)
-//   .'maxWindQuantity='.$maxWindQuantity.chr(13)
-//   .'maxVisitors='.$maxVisitors.chr(13)
-//   );
+  dpm('serviceName='.$serviceName.chr(13)
+  .'hireDays='.$hireDays.chr(13)
+  .'templateName='.$templateName.chr(13)
+  .'maxWindQuantity='.$maxWindQuantity.chr(13)
+  .'maxVisitors='.$maxVisitors.chr(13)
+  );
   
   $service = wsclient_service_load('envision_webservice');
   try {
