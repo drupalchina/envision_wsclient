@@ -43,7 +43,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   $result_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
     $tmpRs = call_envision_webservice($item_id);
-    dpm($tmpRs);
+//     dpm($tmpRs);
     array_push($result_list,$tmpRs);
   }
   
@@ -58,10 +58,11 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     '#prefix' => '<div id="content-from-webservice">',
     '#suffix' => '</div>',
   );
-  
+  $table_message='';
+  $table_data='';
   foreach($result_list as $result){
-    $tableMessage.=$result['message'].'<br>';
-    $tableData.='<tr>'
+    $table_message.=$result['message'].'<br>';
+    $table_data.='<tr>'
                     .'<td>'.$result['data']['vappName'].'</td>'
                     .'<td>'.$result['data']['hireDays'].'</td>'
                     .'<td>'.$result['data']['vms'][0]['name'].'</td>'
@@ -73,7 +74,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   }
     $pane_form[] = array(
       '#type' => 'item',
-      '#title' => t($tableMessage),
+      '#title' => t($table_message),
       '#markup' => '
       <table class="views-table">
         <thead>
@@ -86,7 +87,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
             <th>power status</th>
           </tr>
         </thead>
-        <tbody>'.$tableData.'</tbody>
+        <tbody>'.$table_data.'</tbody>
       </table>
       ',
     );
