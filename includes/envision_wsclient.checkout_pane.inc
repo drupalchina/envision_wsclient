@@ -23,7 +23,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   
 //   dpm($order);
   foreach ($order->commerce_line_items['und'] as $item_id){
-    dpm(call_envision_webservice($item_id));
+    call_envision_webservice($item_id);
   }
   
   
@@ -52,12 +52,21 @@ function call_envision_webservice($item_id){
   $item=commerce_line_item_load($item_id['line_item_id']);
   $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
   
+  /* start test
   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name;
   $hireDays = $item->quantity;
   $vmSize = '';
   $templateName = $product->title;
   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
+  */
+  //test data
+  $serviceName='test1';
+  $hireDays ='';
+  $vmSize = '';
+  $maxWindQuantity='';
+  $maxVisitors='';
+  $templateName='new-uploaded';
   
 //   dpm('serviceName='.$serviceName.chr(13)
 //   .'hireDays='.$hireDays.chr(13)

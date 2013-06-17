@@ -88,12 +88,17 @@ function envision_wsclient_default_wsclient_service() {
   $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
   $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
   $operation['type']='POST';
-
-
   $service->operations['create'] = $operation;
-  $services[$service->name] = $service;
-  //debug($service);
   
+  //delete operation
+  $operation = array();
+  $operation['label'] = 'Delete';
+  $operation['url'] = 'deletevApp';
+  $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $operation['type']='POST';
+  $service->operations['delete'] = $operation;
+  
+  $services[$service->name] = $service;
   
   return $services;
 }
