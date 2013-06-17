@@ -120,7 +120,7 @@ function call_envision_webservice($item_id){
 //   .'maxVisitors='.$maxVisitors.chr(13)
 //   );
   
-  $service = wsclient_service_load('envision_creagevapp');
+  $service = wsclient_service_load('envision_webservice');
   try {
     $result = $service->create($serviceName,$hireDays,$vmSize,$maxWindQuantity,$maxVisitors,$templateName);
   }catch (WSClientException $e) {

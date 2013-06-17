@@ -41,7 +41,8 @@ function envision_wsclient_commerce_checkout_pane_info() {
 
 
 /**
- * Implements hook_menu().
+ * Implements hook_menu(). 
+ * for testing
  */
 function envision_wsclient_menu() {
   $items['test/restful'] = array(
@@ -53,6 +54,17 @@ function envision_wsclient_menu() {
   );
 
   return $items;
+}
+
+function exec_wsclient(){
+  $service = wsclient_service_load('envision_webservice');
+  try {
+    $result = $service->delete('test1');
+  }catch (WSClientException $e) {
+    drupal_set_message($e->__toString(),'error');
+    $result = $e->__toString();
+  }
+  return $result;
 }
 
 /**
