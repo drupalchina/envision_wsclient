@@ -18,50 +18,50 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   
-//   $tmpArr = array(
-//     'status'=>'OK',
-//     'code'=>'NONE',
-//     'data'=>array(
-//       'customerName'=>null,
-//       'vappName'=>'test1',
-//       'hireDays'=>'',
-//       'serviceName'=>null,
-//       'vms'=>array(
-//         array(
-//           'name'=>'new-uploaded',
-//           'cpu'=>'hertz * 10^6 X 1',
-//           'os'=>'Microsoft XXX',
-//           'powerStatus'=>'POWERED_OFF',
-//           'network'=>array(),
-//         ),
-//       ),
-//     ),
-//     'message'=>'create vApp \'test1\' successfully',
-//   );
+  $tmpArr = array(
+    'status'=>'OK',
+    'code'=>'NONE',
+    'data'=>array(
+      'customerName'=>null,
+      'vappName'=>'test1',
+      'hireDays'=>'',
+      'serviceName'=>null,
+      'vms'=>array(
+        array(
+          'name'=>'new-uploaded',
+          'cpu'=>'hertz * 10^6 X 1',
+          'os'=>'Microsoft XXX',
+          'powerStatus'=>'POWERED_OFF',
+          'network'=>array(),
+        ),
+      ),
+    ),
+    'message'=>'create vApp \'test1\' successfully',
+  );
   
   
   $result_list = array();
+  $error_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
-    $tmpRs = call_envision_webservice($item_id);
-//     dpm($tmpRs);
-    array_push($result_list,$tmpRs);
+//     $tmpArr = call_envision_webservice($item_id);
+//     dpm($tmpArr);
+    if($tmpArr['status']=='OK'){
+      array_push($result_list,$tmpArr);
+    }else{
+      array_push($error_list,$tmpArr);
+    }
+    
   }
-  
-
-  
-  
-//   dpm($order);
-  
-//   dpm($result===NULL?'null':$result);
   
   $pane_form = array(
     '#prefix' => '<div id="content-from-webservice">',
     '#suffix' => '</div>',
   );
-  $table_message='';
+
+  //get successful items list
   $table_data='';
+  $err_table_data='';
   foreach($result_list as $result){
-    $table_message.=$result['message'].'<br>';
     $table_data.='<tr>'
                     .'<td>'.$result['data']['vappName'].'</td>'
                     .'<td>'.$result['data']['hireDays'].'</td>'
@@ -69,12 +69,14 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
                     .'<td>'.$result['data']['vms'][0]['cpu'].'</td>'
                     .'<td>'.$result['data']['vms'][0]['os'].'</td>'
                     .'<td>'.$result['data']['vms'][0]['powerStatus'].'</td>'
-                 .'<tr>'
-                    ;
+                    .'<td>'.$result['message'].'</td>'
+                 .'<tr>';
   }
-    $pane_form[] = array(
+  
+  //show successful items list to $pane_form['OK']
+    $pane_form['OK'] = array(
       '#type' => 'item',
-      '#title' => t($table_message),
+      '#title' => t('Create Successfully List'),
       '#markup' => '
       <table class="views-table">
         <thead>
@@ -85,12 +87,60 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
             <th>cpu</th>
             <th>os</th>
             <th>power status</th>
+            <th>remote call status</th>
           </tr>
         </thead>
         <tbody>'.$table_data.'</tbody>
       </table>
       ',
     );
+    
+    //get error items list 
+    foreach($error_list as $error){
+      $err_table_data.='<tr>'
+      .'<td>'.$result['code'].'</td>'
+      .'<tr>';
+    }
+    //show error items list to $pane_form['FAULT']
+    $pane_form['FAULT'] = array(
+      '#type' => 'item',
+      '#title' => ''.($err_table_data==''?$err_table_data:'Create Fault list').'',
+      '#markup' => 
+      '<table class="views-table">
+        <thead>
+          <tr>
+            <th>'.($err_table_data==''?$err_table_data:'Error Code').'</th>
+          </tr>
+        </thead>
+        <tbody>'.$err_table_data.'</tbody>
+      </table>
+      ',
+    );
+    
+    
+    // save node to drupal and 
+    $save_node_status='';
+    foreach($result_list as $result){
+      $save_node_status.=save_result_as_node($result).'<br>';
+    }
+    
+    //show save node result in $pane_form['SAVE']
+//     $pane_form['save'] = array(
+//       '#type' => 'item',
+//       '#title' => ''.($err_table_data==''?$err_table_data:'Create Fault list').'',
+//       '#markup' =>
+//       '<table class="views-table">
+//         <thead>
+//           <tr>
+//             <th>'.($err_table_data==''?$err_table_data:'Error Code').'</th>
+//           </tr>
+//         </thead>
+//         <tbody>'.$err_table_data.'</tbody>
+//       </table>
+//       ',
+//     );
+    
+    
  
   return $pane_form;
   
@@ -118,12 +168,12 @@ function call_envision_webservice($item_id){
 //   $templateName='new-uploaded';
 //end test data
   
-  dpm('serviceName='.$serviceName.chr(13)
-  .'hireDays='.$hireDays.chr(13)
-  .'templateName='.$templateName.chr(13)
-  .'maxWindQuantity='.$maxWindQuantity.chr(13)
-  .'maxVisitors='.$maxVisitors.chr(13)
-  );
+//   dpm('serviceName='.$serviceName.chr(13)
+//   .'hireDays='.$hireDays.chr(13)
+//   .'templateName='.$templateName.chr(13)
+//   .'maxWindQuantity='.$maxWindQuantity.chr(13)
+//   .'maxVisitors='.$maxVisitors.chr(13)
+//   );
   
   $service = wsclient_service_load('envision_webservice');
   try {
@@ -133,6 +183,29 @@ function call_envision_webservice($item_id){
     $result = $e->__toString();
   }
   return $result;
+}
+
+function save_result_as_node($result){
+//   dpm($result);
+  global $user;
+  try {
+  $node = (object) NULL;;
+  $node->title = $result['data']['vappName'];
+  $node->type = 'running_service';
+  $node->field_template_name = $result['data']['vms'][0]['name'];
+  $node->field_cpu =$result['data']['vms'][0]['cpu'];
+  $node->field_power_status =$result['data']['vms'][0]['powerStatus'];
+  $node->field_network =$result['data']['vms'][0]['network'];
+  $node->uid = $user->uid;
+  $node->status = 1; //(1 or 0): published or not
+  $node->promote = 0; //(1 or 0): promoted to front page
+  $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
+  $node = node_submit($node); // Prepare node for saving
+  node_save($node);
+  }catch (Exception $e) {
+    drupal_set_message($e->__toString(),'error');
+    node_delete($node->nid);
+  }
 }
 
 /**
