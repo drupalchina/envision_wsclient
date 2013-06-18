@@ -153,7 +153,7 @@ function call_envision_webservice($item_id){
   $item=commerce_line_item_load($item_id['line_item_id']);
   $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
   
-  dpm($product);
+//   dpm($product);
   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
   $hireDays = $item->quantity;
   $vmSize = '';
@@ -170,12 +170,12 @@ function call_envision_webservice($item_id){
 //   $templateName='new-uploaded';
 //end test data
   
-//   dpm('serviceName='.$serviceName.chr(13)
-//   .'hireDays='.$hireDays.chr(13)
-//   .'templateName='.$templateName.chr(13)
-//   .'maxWindQuantity='.$maxWindQuantity.chr(13)
-//   .'maxVisitors='.$maxVisitors.chr(13)
-//   );
+  dpm('serviceName='.$serviceName.chr(13)
+  .'hireDays='.$hireDays.chr(13)
+  .'templateName='.$templateName.chr(13)
+  .'maxWindQuantity='.$maxWindQuantity.chr(13)
+  .'maxVisitors='.$maxVisitors.chr(13)
+  );
   
   $service = wsclient_service_load('envision_webservice');
   try {
@@ -205,7 +205,7 @@ function save_result_as_node($result){
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
   $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'];
   node_save($node);
-  dpm($result);
+//   dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
     node_delete($node->nid);
