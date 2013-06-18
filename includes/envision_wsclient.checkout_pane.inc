@@ -18,32 +18,32 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   
-  $tmpArr = array(
-    'status'=>'OK',
-    'code'=>'NONE',
-    'data'=>array(
-      'customerName'=>null,
-      'vappName'=>'test1',
-      'hireDays'=>'',
-      'serviceName'=>null,
-      'vms'=>array(
-        array(
-          'name'=>'new-uploaded',
-          'cpu'=>'hertz * 10^6 X 1',
-          'os'=>'Microsoft XXX',
-          'powerStatus'=>'POWERED_OFF',
-          'network'=>array(),
-        ),
-      ),
-    ),
-    'message'=>'create vApp \'test1\' successfully',
-  );
+//   $tmpArr = array(
+//     'status'=>'OK',
+//     'code'=>'NONE',
+//     'data'=>array(
+//       'customerName'=>null,
+//       'vappName'=>'test1',
+//       'hireDays'=>'',
+//       'serviceName'=>null,
+//       'vms'=>array(
+//         array(
+//           'name'=>'new-uploaded',
+//           'cpu'=>'hertz * 10^6 X 1',
+//           'os'=>'Microsoft XXX',
+//           'powerStatus'=>'POWERED_OFF',
+//           'network'=>array(),
+//         ),
+//       ),
+//     ),
+//     'message'=>'create vApp \'test1\' successfully',
+//   );
   
   
   $result_list = array();
   $error_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
-//     $tmpArr = call_envision_webservice($item_id);
+    $tmpArr = call_envision_webservice($item_id);
 //     dpm($tmpArr);
     if($tmpArr['status']=='OK'){
       array_push($result_list,$tmpArr);
@@ -151,8 +151,8 @@ function call_envision_webservice($item_id){
   $item=commerce_line_item_load($item_id['line_item_id']);
   $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
   
-  
-  $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.microtime();
+  dpm($product);
+  $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
   $hireDays = $item->quantity;
   $vmSize = '';
   $templateName = $product->title;
@@ -199,9 +199,9 @@ function save_result_as_node($result){
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
-  $node->field_cpu['und'][0] =$result['data']['vms'][0]['cpu'];
-  $node->field_power_status['und'][0] =$result['data']['vms'][0]['powerStatus'];
-  $node->field_network['und'][0] =$result['data']['vms'][0]['network'];
+  $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
+  $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
+  $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'];
   node_save($node);
   dpm($result);
   }catch (Exception $e) {
