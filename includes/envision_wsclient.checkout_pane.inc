@@ -17,7 +17,8 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  * Checkout pane callback: builds a shipping quote selection form.
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
-  
+//   dpm($order);
+//   return ;
 //   $tmpArr = array(
 //     'status'=>'OK',
 //     'code'=>'NONE',
@@ -38,20 +39,21 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
 //     ),
 //     'message'=>'create vApp \'test1\' successfully',
 //   );
-  
+  $initial_time=microtime();
   
   $result_list = array();
   $error_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
-    $tmpArr = call_envision_webservice($item_id);
+    $tmpArr = call_envision_webservice($item_id,$order);
 //     dpm($tmpArr);
     if($tmpArr['status']=='OK'){
       array_push($result_list,$tmpArr);
     }else{
       array_push($error_list,$tmpArr);
     }
-    
   }
+  
+  $call_wsclient_time=microtime()-$initial_time;
   
   $pane_form = array(
     '#prefix' => '<div id="content-from-webservice">',
@@ -119,6 +121,8 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
       ',
     );
     
+    $output_time=microtime()-$call_wsclient_time;
+    
     
     // save node to drupal and 
     $save_node_status='';
@@ -142,20 +146,29 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
 //       ',
 //     );
     
+    $node_save_time=microtime()-$output_time;
     
+    $total_time=$node_save_time-$initial_time;
+    
+    dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
+    .'output_time='.$output_time.chr(13)
+    .'templateName='.$templateName.chr(13)
+    .'node_save_time='.$node_save_time.chr(13)
+    .'total_time='.$total_time.chr(13)
+    );
  
   return $pane_form;
   
 }
 
-function call_envision_webservice($item_id){
+function call_envision_webservice($item_id,$order){
   
   $item=commerce_line_item_load($item_id['line_item_id']);
   $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
   
 //   dpm($product);
 //   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
-  $serviceName = 'test1';//test data
+  $serviceName = $order->data[$item_id['line_item_id'].''];
   $hireDays = $item->quantity;
   $vmSize = '';
 //   $templateName = $product->title;
@@ -203,12 +216,12 @@ function save_result_as_node($result){
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
-  $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
+//   $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
   $node->field_storage['und'][0]['value'] =$result['data']['vms'][0]['hardDisk'][0]['size'];
   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-  dpm($result);
+//   dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }
