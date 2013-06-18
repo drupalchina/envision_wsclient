@@ -192,7 +192,6 @@ function call_envision_webservice($item_id){
 function save_result_as_node($result){
 //   dpm($result);
   global $user;
-  try {
   $node = (object) NULL;;
   $node->title = $result['data']['vappName'];
   $node->type = 'running_service';
@@ -200,18 +199,12 @@ function save_result_as_node($result){
   $node->status = 1; //(1 or 0): published or not
   $node->promote = 0; //(1 or 0): promoted to front page
   $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
-  $node = node_submit($node); // Prepare node for saving
-  node_save($node);
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
   $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'];
+  $node = node_submit($node); // Prepare node for saving
   node_save($node);
-//   dpm($result);
-  }catch (Exception $e) {
-    drupal_set_message($e->__toString(),'error');
-    node_delete($node->nid);
-  }
 }
 
 /**
