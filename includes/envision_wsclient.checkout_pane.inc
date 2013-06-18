@@ -98,7 +98,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     //get error items list 
     foreach($error_list as $error){
       $err_table_data.='<tr>'
-      .'<td>'.$result['code'].'</td>'
+      .'<td>'.$error['code'].'</td>'
       .'<tr>';
     }
     //show error items list to $pane_form['FAULT']
