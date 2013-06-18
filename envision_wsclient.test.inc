@@ -3,7 +3,7 @@
 
 
 function exec_wsclient(){
-  $service = wsclient_service_load('envision_creagevapp');
+  $service = wsclient_service_load('envision_webservice');
   
   try {
     $result = $service->delete('test3');
@@ -11,6 +11,6 @@ function exec_wsclient(){
      print($e->__toString());
   }
   print('result<br>');
-  print_r($result);
+  print_r('result:'.$result);
   return;
 }

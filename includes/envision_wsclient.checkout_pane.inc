@@ -154,10 +154,12 @@ function call_envision_webservice($item_id){
   $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
   
 //   dpm($product);
-  $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
+//   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
+  $serviceName = 'test1';//test data
   $hireDays = $item->quantity;
   $vmSize = '';
-  $templateName = $product->title;
+//   $templateName = $product->title;
+  $templateName = 'new-uploaded';//test data
   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
   
