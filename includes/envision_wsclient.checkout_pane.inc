@@ -192,15 +192,16 @@ function save_result_as_node($result){
   $node = (object) NULL;;
   $node->title = $result['data']['vappName'];
   $node->type = 'running_service';
-  $node->field_template_name = $result['data']['vms'][0]['name'];
-  $node->field_cpu =$result['data']['vms'][0]['cpu'];
-  $node->field_power_status =$result['data']['vms'][0]['powerStatus'];
-  $node->field_network =$result['data']['vms'][0]['network'];
   $node->uid = $user->uid;
   $node->status = 1; //(1 or 0): published or not
   $node->promote = 0; //(1 or 0): promoted to front page
   $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
   $node = node_submit($node); // Prepare node for saving
+  node_save($node);
+  $node->field_template_name = $result['data']['vms'][0]['name'];
+  $node->field_cpu =$result['data']['vms'][0]['cpu'];
+  $node->field_power_status =$result['data']['vms'][0]['powerStatus'];
+  $node->field_network =$result['data']['vms'][0]['network'];
   node_save($node);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
