@@ -206,7 +206,7 @@ function save_result_as_node($result){
   $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'].'';
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-//   dpm($result);
+  dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }
