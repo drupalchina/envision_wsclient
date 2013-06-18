@@ -192,6 +192,7 @@ function call_envision_webservice($item_id){
 function save_result_as_node($result){
 //   dpm($result);
   global $user;
+  try {
   $node = (object) NULL;;
   $node->title = $result['data']['vappName'];
   $node->type = 'running_service';
@@ -202,9 +203,13 @@ function save_result_as_node($result){
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
-  $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'];
+  $node->field_network['und'][0]['value'] =$result['data']['vms'][0]['network'].'';
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
+//   dpm($result);
+  }catch (Exception $e) {
+    drupal_set_message($e->__toString(),'error');
+  }
 }
 
 /**
