@@ -99,6 +99,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     foreach($error_list as $error){
       $err_table_data.='<tr>'
       .'<td>'.$error['code'].'</td>'
+      .'<td>'.$error['message'].'</td>'
       .'<tr>';
     }
     //show error items list to $pane_form['FAULT']
@@ -110,6 +111,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
         <thead>
           <tr>
             <th>'.($err_table_data==''?$err_table_data:'Error Code').'</th>
+            <th>'.($err_table_data==''?$err_table_data:'Message').'</th>
           </tr>
         </thead>
         <tbody>'.$err_table_data.'</tbody>
