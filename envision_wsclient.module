@@ -56,17 +56,6 @@ function envision_wsclient_menu() {
   return $items;
 }
 
-function exec_wsclient(){
-  $service = wsclient_service_load('envision_webservice');
-  try {
-    $result = $service->delete('test1');
-  }catch (WSClientException $e) {
-    drupal_set_message($e->__toString(),'error');
-    $result = $e->__toString();
-  }
-  print_r($result);
-  return $result;
-}
 
 /**
  * Implements hook_default_wsclient_service().

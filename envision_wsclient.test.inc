@@ -6,7 +6,7 @@ function exec_wsclient(){
   $service = wsclient_service_load('envision_creagevapp');
   
   try {
-    $result = $service->create('test3','new-uploaded');
+    $result = $service->delete('test3');
   }catch (WSClientException $e) {
      print($e->__toString());
   }
