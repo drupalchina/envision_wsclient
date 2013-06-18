@@ -17,6 +17,13 @@ function envision_wsclient_commerce_checkout_page_info() {
     'weight' => 4,
     'buttons' => TRUE,
   );
+  
+  $checkout_pages['input_vapp_name'] = array(
+    'name' => t('Enter vApp name'),
+    'title' => t('Enter vApp name'),
+    'weight' => 3,
+    'buttons' => TRUE,
+  );
 
   return $checkout_pages;
 }
@@ -33,6 +40,15 @@ function envision_wsclient_commerce_checkout_pane_info() {
     'file' => 'includes/envision_wsclient.checkout_pane.inc',
     'page' => 'checkout_to_webservice',
     'weight' => 3,
+    'review' => FALSE,
+  );
+  
+  $checkout_panes['input_vapp_name_pane'] = array(
+    'title' => t('Please Enter vapp Name'),
+    'base' => 'envision_wsclient_input_vapp_pane',
+    'file' => 'includes/envision_wsclient.input_vapp_name.inc',
+    'page' => 'input_vapp_name',
+    'weight' => 2,
     'review' => FALSE,
   );
 
