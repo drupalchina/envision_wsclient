@@ -3,13 +3,14 @@
 
 
 function exec_wsclient(){
-  $service = wsclient_service_load('envision_webservice');
-  
+    $service = wsclient_service_load('envision_webservice');
   try {
-    $result = $service->delete('test1');
+    $result = $service->create('test-1','2','new-uploaded');
   }catch (WSClientException $e) {
-     print($e->__toString());
+    drupal_set_message($e->__toString(),'error');
+    $result = $e->__toString();
   }
-  print_r('result:'.$result);
-  return;
+  dpm($result);
+  print_r($result);
+  return $result;
 }
