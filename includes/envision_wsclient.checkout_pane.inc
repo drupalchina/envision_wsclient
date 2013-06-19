@@ -39,7 +39,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
 //     ),
 //     'message'=>'create vApp \'test1\' successfully',
 //   );
-  $initial_time=microtime();
+  $initial_time=microtime(TRUE);
   
   $result_list = array();
   $error_list = array();
@@ -53,7 +53,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     }
   }
   
-  $call_wsclient_time=microtime()-$initial_time;
+  $call_wsclient_time=microtime(TRUE)-$initial_time;
   
   $pane_form = array(
     '#prefix' => '<div id="content-from-webservice">',
@@ -121,7 +121,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
       ',
     );
     
-    $output_time=microtime()-$call_wsclient_time;
+    $output_time=microtime(TRUE)-$call_wsclient_time;
     
     
     // save node to drupal and 
@@ -146,13 +146,12 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
 //       ',
 //     );
     
-    $node_save_time=microtime()-$output_time;
+    $node_save_time=microtime(TRUE)-$output_time;
     
     $total_time=$node_save_time-$initial_time;
     
     dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
     .'output_time='.$output_time.chr(13)
-    .'templateName='.$templateName.chr(13)
     .'node_save_time='.$node_save_time.chr(13)
     .'total_time='.$total_time.chr(13)
     );
@@ -171,8 +170,7 @@ function call_envision_webservice($item_id,$order){
   $serviceName = $order->data[$item_id['line_item_id'].''];
   $hireDays = $item->quantity;
   $vmSize = '';
-//   $templateName = $product->title;
-  $templateName = 'new-uploaded';//test data
+  $templateName = 'new-uploaded';
   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
   
@@ -185,12 +183,12 @@ function call_envision_webservice($item_id,$order){
 //   $templateName='new-uploaded';
 //end test data
   
-  dpm('serviceName='.$serviceName.chr(13)
-  .'hireDays='.$hireDays.chr(13)
-  .'templateName='.$templateName.chr(13)
-  .'maxWindQuantity='.$maxWindQuantity.chr(13)
-  .'maxVisitors='.$maxVisitors.chr(13)
-  );
+//   dpm('serviceName='.$serviceName.chr(13)
+//   .'hireDays='.$hireDays.chr(13)
+//   .'templateName='.$templateName.chr(13)
+//   .'maxWindQuantity='.$maxWindQuantity.chr(13)
+//   .'maxVisitors='.$maxVisitors.chr(13)
+//   );
   
   $service = wsclient_service_load('envision_webservice');
   try {
@@ -216,12 +214,12 @@ function save_result_as_node($result){
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
-//   $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
+  $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
   $node->field_storage['und'][0]['value'] =$result['data']['vms'][0]['hardDisk'][0]['size'];
   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-//   dpm($result);
+  dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }

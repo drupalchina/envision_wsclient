@@ -98,7 +98,7 @@ function envision_wsclient_input_vapp_pane_checkout_form_submit($form, &$form_st
     $order->data[$key]=$value;
     //$form_state['values']['input_vapp_name_pane'][$item['line_item_id'].'']);
   }
-  dpm($order);
+//   dpm($order);
 }
 
 /**
