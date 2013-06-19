@@ -156,6 +156,9 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     .'node_save_time='.$node_save_time.chr(13)
     .'total_time='.$total_time.chr(13)
     );
+    
+    dpm($result_list);
+    dpm($error_list);
  
   return $pane_form;
   
