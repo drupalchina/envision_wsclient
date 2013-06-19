@@ -97,26 +97,79 @@ function envision_wsclient_default_wsclient_service() {
     ),
   );
   
+  //create operation
   $operation['label'] = 'Create';
   $operation['url'] = 'createvApp';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
   $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
-  $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
-  $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
-  $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
+//   $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
+//   $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
+//   $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
   $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
   $operation['type']='POST';
   $service->operations['create'] = $operation;
   
-  //delete operation
+  //delete by name operation
   $operation = array();
-  $operation['label'] = 'Delete';
-  $operation['url'] = 'deletevApp';
+  $operation['label'] = 'DeleteByName';
+  $operation['url'] = 'deletevAppByName';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
   $operation['type']='POST';
-  $service->operations['delete'] = $operation;
+  $service->operations['delete_by_name'] = $operation;
   
+  //delete by id operation
+  $operation = array();
+  $operation['label'] = 'DeleteById';
+  $operation['url'] = 'deletevAppById';
+  $operation['parameter']['vappId'] = array('type' => 'text', 'label' => 'vappId');
+  $operation['type']='POST';
+  $service->operations['delete_by_id'] = $operation;
+  
+  //deploy by id operation
+  $operation = array();
+  $operation['label'] = 'DeployById';
+  $operation['url'] = 'deployvAppById';
+  $operation['parameter']['vappId'] = array('type' => 'text', 'label' => 'vappId');
+  $operation['parameter']['action'] = array('type' => 'text', 'label' => 'Action');
+  $operation['type']='POST';
+  $service->operations['deploy_by_id'] = $operation;
+  
+  //power by id operation
+  $operation = array();
+  $operation['label'] = 'PowerById';
+  $operation['url'] = 'powervAppById';
+  $operation['parameter']['vappId'] = array('type' => 'text', 'label' => 'vappId');
+  $operation['parameter']['action'] = array('type' => 'text', 'label' => 'Action');
+  $operation['type']='POST';
+  $service->operations['power_by_id'] = $operation;
+  
+  //find by id operation
+  $operation = array();
+  $operation['label'] = 'FindById';
+  $operation['url'] = 'findvAppById';
+  $operation['parameter']['vappId'] = array('type' => 'text', 'label' => 'vappId');
+  $operation['type']='POST';
+  $service->operations['find_by_id'] = $operation;
+  
+
   $services[$service->name] = $service;
   
   return $services;
+}
+
+
+/**
+ * Implements hook_node_delete().
+ */
+function envision_wsclient_node_delete($node) {
+  if($node->type=='running_service'){
+    $service = wsclient_service_load('envision_webservice');
+    try {
+      $result = $service->delete_by_name($node->title);
+    }catch (WSClientException $e) {
+      drupal_set_message($e->__toString(),'error');
+      $result = $e->__toString();
+    }
+    dpm($result);
+  }
 }

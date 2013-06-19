@@ -170,10 +170,10 @@ function call_envision_webservice($item_id,$order){
 //   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
   $serviceName = $order->data[$item_id['line_item_id'].''];
   $hireDays = $item->quantity;
-  $vmSize = '';
+//   $vmSize = '';
   $templateName = 'new-uploaded';
-  $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
-  $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
+//   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
+//   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
   
 //test data start test
 //   $serviceName='test1';
@@ -193,7 +193,7 @@ function call_envision_webservice($item_id,$order){
   
   $service = wsclient_service_load('envision_webservice');
   try {
-    $result = $service->create($serviceName,$hireDays,$vmSize,$maxWindQuantity,$maxVisitors,$templateName);
+    $result = $service->create($serviceName,$hireDays,$templateName);
   }catch (WSClientException $e) {
     drupal_set_message($e->__toString(),'error');
     $result = $e->__toString();
@@ -226,20 +226,6 @@ function save_result_as_node($result){
   }
 }
 
-/**
- * Ajax callback: Returns the shipping details form elements that match the
- * currently selected shipping service.
- */
-function envision_wsclient_pane_service_details_refresh($form, $form_state) {
-  
-}
-
-/**
- * Ajax callback: Returns recalculated shipping services.
- */
-function commerce_shipping_recalculate_services_refresh($form, $form_state) {
-  
-}
 
 /**
  * Validate callback for recalculating shipping services.
