@@ -148,7 +148,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     
     $node_save_time=microtime(TRUE)-$output_time;
     
-    $total_time=$node_save_time-$initial_time;
+    $total_time=$node_save_time+$output_time+$call_wsclient_time;
     
     dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
     .'output_time='.$output_time.chr(13)
@@ -219,7 +219,7 @@ function save_result_as_node($result){
   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-  dpm($result);
+//   dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }
