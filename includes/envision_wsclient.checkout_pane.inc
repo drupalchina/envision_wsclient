@@ -45,7 +45,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   $error_list = array();
   foreach ($order->commerce_line_items['und'] as $item_id){
     $tmpArr = call_envision_webservice($item_id,$order);
-    dpm($tmpArr);
+//     dpm($tmpArr);
     if($tmpArr['status']=='OK'){
       array_push($result_list,$tmpArr);
     }else{
@@ -151,14 +151,14 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
     
     $total_time=$node_save_time+$output_time+$call_wsclient_time;
     
-    dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
-    .'output_time='.$output_time.chr(13)
-    .'node_save_time='.$node_save_time.chr(13)
-    .'total_time='.$total_time.chr(13)
-    );
+//     dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
+//     .'output_time='.$output_time.chr(13)
+//     .'node_save_time='.$node_save_time.chr(13)
+//     .'total_time='.$total_time.chr(13)
+//     );
     
-    dpm($result_list);
-    dpm($error_list);
+//     dpm($result_list);
+//     dpm($error_list);
  
   return $pane_form;
   
@@ -223,7 +223,7 @@ function save_result_as_node($result){
   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-//   dpm($result);
+  dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }
