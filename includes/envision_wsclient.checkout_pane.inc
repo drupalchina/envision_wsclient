@@ -54,6 +54,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   }
   
   $call_wsclient_time=microtime(TRUE)-$initial_time;
+  $initial_time=microtime(TRUE);
   
   $pane_form = array(
     '#prefix' => '<div id="content-from-webservice">',
@@ -121,8 +122,8 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
       ',
     );
     
-    $output_time=microtime(TRUE)-$call_wsclient_time;
-    
+    $output_time=microtime(TRUE)-$initial_time;
+    $initial_time=microtime(TRUE);
     
     // save node to drupal and 
     $save_node_status='';
@@ -146,7 +147,7 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
 //       ',
 //     );
     
-    $node_save_time=microtime(TRUE)-$output_time;
+    $node_save_time=microtime(TRUE)-$initial_time;
     
     $total_time=$node_save_time+$output_time+$call_wsclient_time;
     
