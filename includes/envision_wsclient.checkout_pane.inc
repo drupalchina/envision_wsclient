@@ -174,7 +174,7 @@ function call_envision_webservice($item_id,$order){
   $serviceName = $order->data[$item_id['line_item_id'].''];
   $hireDays = $item->quantity;
 //   $vmSize = '';
-  $templateName = 'new-uploaded';
+  $templateName = 'no-disk-uploaded';
 //   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
 //   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
   
@@ -219,8 +219,10 @@ function save_result_as_node($result){
   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
   $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
-  $node->field_storage['und'][0]['value'] =$result['data']['vms'][0]['hardDisk'][0]['size'];
+//   $node->field_storage['und'][0]['value'] =$result['data']['vms'][0]['hardDisk'][0]['size'];
+  $node->field_storage['und'][0]['value'] ='40960 Mb';//test data,the storage data not prepared.
   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
+  $node->field_vappid['und'][0]['value'] =$result['data']['vappId'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
   dpm($result);

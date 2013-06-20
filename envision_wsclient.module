@@ -165,7 +165,7 @@ function envision_wsclient_node_delete($node) {
   if($node->type=='running_service'){
     $service = wsclient_service_load('envision_webservice');
     try {
-      $result = $service->delete_by_name($node->title);
+      $result = $service->delete_by_id($node->field_vappid['und'][0]['value']);
     }catch (WSClientException $e) {
       drupal_set_message($e->__toString(),'error');
       $result = $e->__toString();

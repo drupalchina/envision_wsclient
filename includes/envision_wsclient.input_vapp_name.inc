@@ -33,7 +33,7 @@ function envision_wsclient_input_vapp_pane_checkout_form($form, &$form_state, $c
     $pane_form[$item_id['line_item_id'].'']['vapp-name'] = array(
       '#type' => 'textfield',
       '#title' => t('Please enter the vapp name.'),
-      '#default_value' => 'test1',
+      '#default_value' => '',
       '#size' => 60,
       '#required' => TRUE,
     );
