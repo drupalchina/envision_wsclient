@@ -225,7 +225,7 @@ function save_result_as_node($result){
   $node->field_vappid['und'][0]['value'] =$result['data']['vappId'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
-  dpm($result);
+  //dpm($result);
   }catch (Exception $e) {
     drupal_set_message($e->__toString(),'error');
   }
