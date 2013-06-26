@@ -102,9 +102,6 @@ function envision_wsclient_default_wsclient_service() {
   $operation['url'] = 'createvApp';
   $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
   $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
-//   $operation['parameter']['vmSize'] = array('type' => 'text', 'label' => 'vmSize');
-//   $operation['parameter']['maxWindQuantity'] = array('type' => 'text', 'label' => 'maxWindQuantity');
-//   $operation['parameter']['maxVisitors'] = array('type' => 'text', 'label' => 'maxVisitors');
   $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
   $operation['type']='POST';
   $service->operations['create'] = $operation;
@@ -150,6 +147,24 @@ function envision_wsclient_default_wsclient_service() {
   $operation['parameter']['vappId'] = array('type' => 'text', 'label' => 'vappId');
   $operation['type']='POST';
   $service->operations['find_by_id'] = $operation;
+  
+  //Asynchronous Create vApp
+  $operation = array();
+  $operation['label'] = 'AsyncCreatevApp';
+  $operation['url'] = 'asyncCreatevApp';
+  $operation['parameter']['serviceName'] = array('type' => 'text', 'label' => 'ServiceName');
+  $operation['parameter']['hireDays'] = array('type' => 'text', 'label' => 'hireDays');
+  $operation['parameter']['templateName'] = array('type' => 'text', 'label' => 'templateName');
+  $operation['type']='POST';
+  $service->operations['async_create'] = $operation;
+  
+  //Asynchronous Track task by task ID
+  $operation = array();
+  $operation['label'] = 'TrackTaskById';
+  $operation['url'] = 'trackTaskById';
+  $operation['parameter']['taskId'] = array('type' => 'text', 'label' => 'Task ID');
+  $operation['type']='POST';
+  $service->operations['track_by_id'] = $operation;
   
 
   $services[$service->name] = $service;
