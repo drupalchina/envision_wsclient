@@ -18,7 +18,7 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
 //   dpm($order);
-//   return ;
+  return ;
 //   $tmpArr = array(
 //     'status'=>'OK',
 //     'code'=>'NONE',

@@ -173,3 +173,10 @@ function envision_wsclient_node_delete($node) {
     //dpm($result);
   }
 }
+
+/**
+ * Implements hook_cron().
+ */
+function envision_wsclient_cron() {
+  drupal_set_message('Hello:'.time());
+}
