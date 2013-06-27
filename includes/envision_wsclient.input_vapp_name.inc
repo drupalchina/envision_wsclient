@@ -147,7 +147,7 @@ function call_envision_webservice($item_id,$service_name){
   $serviceName = $service_name;
   $hireDays = $item->quantity;
 //   $templateName = $product->title;
-  $templateName = 'BAO-S-1';
+  $templateName = 'new-uploaded';
   
   dpm('$templateName:'.$templateName);
   
