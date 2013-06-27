@@ -217,12 +217,13 @@ function save_result_as_node($result){
   $node->promote = 0; //(1 or 0): promoted to front page
   $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
-  $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
-  $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
-  $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
+//   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
+//   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
+//   $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
 //   $node->field_storage['und'][0]['value'] =$result['data']['vms'][0]['hardDisk'][0]['size'];
-  $node->field_storage['und'][0]['value'] ='40960 Mb';//test data,the storage data not prepared.
-  $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
+//   $node->field_storage['und'][0]['value'] ='40960 Mb';//test data,the storage data not prepared.
+//   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
+  $node->field_task_id['und'][0]['value'] =$result['data']['taskId'];
   $node->field_vappid['und'][0]['value'] =$result['data']['vappId'];
   $node = node_submit($node); // Prepare node for saving
   node_save($node);

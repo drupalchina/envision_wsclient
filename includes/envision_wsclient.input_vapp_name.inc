@@ -118,10 +118,9 @@ function envision_wsclient_input_vapp_pane_checkout_form_submit($form, &$form_st
   foreach ($order->commerce_line_items['und'] as $item){
     $key = $item['line_item_id'].'';
     $service_name = $form_state['values']['input_vapp_name_pane'][$key]['vapp_name'];
-    
     $result = call_envision_webservice($item,$service_name);
-
     if($result['status']=='OK'){
+      $result['data']['vappName']=$service_name;
       array_push($result_list,$result);
     }else{
       array_push($error_list,$result);
