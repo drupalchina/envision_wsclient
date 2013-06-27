@@ -17,45 +17,14 @@ function envision_wsclient_pane_settings_form($checkout_pane) {
  * Checkout pane callback: builds a shipping quote selection form.
  */
 function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
-//   dpm($order);
   dpm($order);
-  return ;
-//   $tmpArr = array(
-//     'status'=>'OK',
-//     'code'=>'NONE',
-//     'data'=>array(
-//       'customerName'=>null,
-//       'vappName'=>'test1',
-//       'hireDays'=>'',
-//       'serviceName'=>null,
-//       'vms'=>array(
-//         array(
-//           'name'=>'new-uploaded',
-//           'cpu'=>'hertz * 10^6 X 1',
-//           'os'=>'Microsoft XXX',
-//           'powerStatus'=>'POWERED_OFF',
-//           'network'=>array(),
-//         ),
-//       ),
-//     ),
-//     'message'=>'create vApp \'test1\' successfully',
-//   );
-  $initial_time=microtime(TRUE);
+
+  $result_list = $order->data['result_list'];
+  $error_list = $order->data['error_list'];
   
-  $result_list = array();
-  $error_list = array();
-  foreach ($order->commerce_line_items['und'] as $item_id){
-    $tmpArr = call_envision_webservice($item_id,$order);
-//     dpm($tmpArr);
-    if($tmpArr['status']=='OK'){
-      array_push($result_list,$tmpArr);
-    }else{
-      array_push($error_list,$tmpArr);
-    }
+  foreach ($result_list as $ok_item){
+    save_result_as_node($ok_item);
   }
-  
-  $call_wsclient_time=microtime(TRUE)-$initial_time;
-  $initial_time=microtime(TRUE);
   
   $pane_form = array(
     '#prefix' => '<div id="content-from-webservice">',
@@ -68,12 +37,6 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
   foreach($result_list as $result){
     $table_data.='<tr>'
                     .'<td>'.$result['data']['vappName'].'</td>'
-                    .'<td>'.$result['data']['hireDays'].'</td>'
-                    .'<td>'.$result['data']['vms'][0]['name'].'</td>'
-                    .'<td>'.$result['data']['vms'][0]['cpu'].'</td>'
-                    .'<td>'.$result['data']['vms'][0]['os'].'</td>'
-                    .'<td>'.$result['data']['vms'][0]['powerStatus'].'</td>'
-                    .'<td>'.$result['message'].'</td>'
                  .'<tr>';
   }
   
@@ -86,12 +49,6 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
         <thead>
           <tr>
             <th>Vapp Name</th>
-            <th>Hire Days</th>
-            <th>name</th>
-            <th>cpu</th>
-            <th>os</th>
-            <th>power status</th>
-            <th>remote call status</th>
           </tr>
         </thead>
         <tbody>'.$table_data.'</tbody>
@@ -123,88 +80,14 @@ function envision_wsclient_pane_checkout_form($form, &$form_state, $checkout_pan
       ',
     );
     
-    $output_time=microtime(TRUE)-$initial_time;
-    $initial_time=microtime(TRUE);
-    
-    // save node to drupal and 
-    $save_node_status='';
-    foreach($result_list as $result){
-      $save_node_status.=save_result_as_node($result).'<br>';
-    }
-    
-    //show save node result in $pane_form['SAVE']
-//     $pane_form['save'] = array(
-//       '#type' => 'item',
-//       '#title' => ''.($err_table_data==''?$err_table_data:'Create Fault list').'',
-//       '#markup' =>
-//       '<table class="views-table">
-//         <thead>
-//           <tr>
-//             <th>'.($err_table_data==''?$err_table_data:'Error Code').'</th>
-//           </tr>
-//         </thead>
-//         <tbody>'.$err_table_data.'</tbody>
-//       </table>
-//       ',
-//     );
-    
-    $node_save_time=microtime(TRUE)-$initial_time;
-    
-    $total_time=$node_save_time+$output_time+$call_wsclient_time;
-    
-//     dpm('call_wsclient_time='.$call_wsclient_time.chr(13)
-//     .'output_time='.$output_time.chr(13)
-//     .'node_save_time='.$node_save_time.chr(13)
-//     .'total_time='.$total_time.chr(13)
-//     );
-    
-//     dpm($result_list);
-//     dpm($error_list);
- 
+
   return $pane_form;
   
 }
 
-function call_envision_webservice($item_id,$order){
-  
-  $item=commerce_line_item_load($item_id['line_item_id']);
-  $product = commerce_product_load($item->commerce_product['und'][0]['product_id']);
-  
-//   dpm($product);
-//   $serviceName = taxonomy_term_load($product->field_service_name['und'][0]['tid'])->name.'-'.$product->product_id;
-  $serviceName = $order->data[$item_id['line_item_id'].''];
-  $hireDays = $item->quantity;
-//   $vmSize = '';
-  $templateName = 'no-disk-uploaded';
-//   $maxWindQuantity = taxonomy_term_load($product->field_max_wind_machine_quantity['und'][0]['tid'])->name;
-//   $maxVisitors = taxonomy_term_load($product->field_max_visitors['und'][0]['tid'])->name;
-  
-//test data start test
-//   $serviceName='test1';
-//   $hireDays ='';
-//   $vmSize = '';
-//   $maxWindQuantity='';
-//   $maxVisitors='';
-//   $templateName='new-uploaded';
-//end test data
-  
-//   dpm('serviceName='.$serviceName.chr(13)
-//   .'hireDays='.$hireDays.chr(13)
-//   .'templateName='.$templateName.chr(13)
-//   .'maxWindQuantity='.$maxWindQuantity.chr(13)
-//   .'maxVisitors='.$maxVisitors.chr(13)
-//   );
-  
-  $service = wsclient_service_load('envision_webservice');
-  try {
-    $result = $service->create($serviceName,$hireDays,$templateName);
-  }catch (WSClientException $e) {
-    drupal_set_message($e->__toString(),'error');
-    $result = $e->__toString();
-  }
-  return $result;
-}
-
+/**
+ * save result to node
+ */
 function save_result_as_node($result){
 //   dpm($result);
   global $user;
@@ -216,7 +99,7 @@ function save_result_as_node($result){
   $node->status = 1; //(1 or 0): published or not
   $node->promote = 0; //(1 or 0): promoted to front page
   $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
-  $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
+//   $node->field_template_name['und'][0]['value'] = $result['data']['vms'][0]['name'];
 //   $node->field_cpu['und'][0]['value'] =$result['data']['vms'][0]['cpu'];
 //   $node->field_power_status['und'][0]['value'] =$result['data']['vms'][0]['powerStatus'];
 //   $node->field_memory['und'][0]['value'] =$result['data']['vms'][0]['memory'];
@@ -225,6 +108,7 @@ function save_result_as_node($result){
 //   $node->field_ip_address['und'][0]['value'] =$result['data']['vms'][0]['network'][0]['ipAddress'];
   $node->field_task_id['und'][0]['value'] =$result['data']['taskId'];
   $node->field_vappid['und'][0]['value'] =$result['data']['vappId'];
+  $node->field_progress['und'][0]['value'] =0;
   $node = node_submit($node); // Prepare node for saving
   node_save($node);
   //dpm($result);
@@ -266,9 +150,3 @@ function envision_wsclient_pane_checkout_form_submit($form, &$form_state, $check
 
 }
 
-/**
- * Checkout pane callback: show the selected shipping service on the review pane.
- */
-function envision_wsclient_pane_review($form, $form_state, $checkout_pane, $order) {
-  
-}
