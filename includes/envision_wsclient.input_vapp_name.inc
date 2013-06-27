@@ -138,7 +138,7 @@ function call_envision_webservice($item_id,$service_name){
 
   $service = wsclient_service_load('envision_webservice');
   try {
-    $result = $service->asyncCreatevApp($serviceName,$hireDays,$templateName);
+    $result = $service->async_create($serviceName,$hireDays,$templateName);
   }catch (WSClientException $e) {
     drupal_set_message($e->__toString(),'error');
     $result = $e->__toString();
