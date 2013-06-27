@@ -19,8 +19,8 @@ function envision_wsclient_commerce_checkout_page_info() {
   );
   
   $checkout_pages['input_vapp_name'] = array(
-    'name' => t('Confirm Virtual Application Name'),
-    'title' => t('Confirm Virtual Application Name'),
+    'name' => t('virtual Application Name'),
+    'title' => t('Virtual Application Name'),
     'weight' => 3,
     'buttons' => TRUE,
   );
@@ -44,7 +44,7 @@ function envision_wsclient_commerce_checkout_pane_info() {
   );
   
   $checkout_panes['input_vapp_name_pane'] = array(
-    'title' => t('Virtual Application Item List'),
+    'title' => t('Virtual application items are ready to create.'),
     'base' => 'envision_wsclient_input_vapp_pane',
     'file' => 'includes/envision_wsclient.input_vapp_name.inc',
     'page' => 'input_vapp_name',

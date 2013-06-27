@@ -18,6 +18,11 @@ function envision_wsclient_input_vapp_pane_settings_form($checkout_pane) {
  */
 function envision_wsclient_input_vapp_pane_checkout_form($form, &$form_state, $checkout_pane, $order) {
   
+  $pane_form['tips'] = array(
+        '#type' => 'item',
+        '#title' => t('Tips'),
+        '#markup' => 'The virtual application name is use for an <em>unique identifier</em>',
+  );
   
   foreach ($order->commerce_line_items['und'] as $item_id){
     $item=commerce_line_item_load($item_id['line_item_id']);
@@ -29,10 +34,18 @@ function envision_wsclient_input_vapp_pane_checkout_form($form, &$form_state, $c
       '#collapsible' => TRUE,
       '#group' => 'vertical_tabs',
     );
-    $pane_form[$item_id['line_item_id'].'']['vapp-name'] = array(
-      '#type' => 'item',
+    $pane_form[$item_id['line_item_id'].'']['vapp_name'] = array(
+//       '#type' => 'item',
+//       '#title' => t('Auto generated vritual application name .'),
+//       '#markup' => ''.$product->title.'-'.microtime(TRUE).rand(1000,9999),
+      
+      '#type' => 'textfield',
       '#title' => t('Auto generated vritual application name .'),
-      '#markup' => ''.$product->title.'-'.microtime(TRUE).rand(1000,9999),
+      '#size' => 60,
+      '#maxlength' => 128,
+      '#default_value' => ''.$product->title.'-'.microtime(TRUE).rand(1000,9999),
+      '#attributes' => array('disabled' => 'disabled'),
+      '#disabled' => TRUE,
     );
   }
   
@@ -87,12 +100,12 @@ function envision_wsclient_input_vapp_pane_checkout_form_validate($form, &$form_
 /**
  * Checkout pane callback: submit the shipping checkout pane.
  */
-function envision_wsclient_input_vapp_pane_checkout_form_submit($form, &$form_state, $checkout_pane, $order) {
+function envision_wsclient_input_vapp_pane_checkout_form_submit($form, &$form_state, $vapp_name_pane, $order) {
   
 //   $order->data=null;
 //   foreach($order->commerce_line_items['und'] as &$item){
 //     $key = $item['line_item_id'].'';
-//     $value = $form_state['values']['input_vapp_name_pane'][$key]['vapp-name'];
+//     $value = $form_state['values']['input_vapp_name_pane'][$key]['vapp_name'];
 //     $order->data[$key]=$value;
 //     //$form_state['values']['input_vapp_name_pane'][$item['line_item_id'].'']);
 //   }
@@ -104,10 +117,10 @@ function envision_wsclient_input_vapp_pane_checkout_form_submit($form, &$form_st
   $error_list = array();
   foreach ($order->commerce_line_items['und'] as $item){
     $key = $item['line_item_id'].'';
-    $service_name = $form_state['values']['input_vapp_name_pane'][$key]['vapp-name'];
+    $service_name = $form_state['values']['input_vapp_name_pane'][$key]['vapp_name'];
     
-    $result = call_envision_webservice($item_id,$service_name);
-    //     dpm($tmpArr);
+    $result = call_envision_webservice($item,$service_name);
+
     if($result['status']=='OK'){
       array_push($result_list,$result);
     }else{
@@ -134,8 +147,11 @@ function call_envision_webservice($item_id,$service_name){
 
   $serviceName = $service_name;
   $hireDays = $item->quantity;
-  $templateName = $product->title;
-
+//   $templateName = $product->title;
+  $templateName = 'BAO-S-1';
+  
+  dpm('$templateName:'.$templateName);
+  
   $service = wsclient_service_load('envision_webservice');
   try {
     $result = $service->async_create($serviceName,$hireDays,$templateName);
