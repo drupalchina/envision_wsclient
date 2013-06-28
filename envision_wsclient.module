@@ -194,4 +194,9 @@ function envision_wsclient_node_delete($node) {
  */
 function envision_wsclient_cron() {
   drupal_set_message('Hello:'.time());
+  $result = db_query("SELECT nid FROM {node} WHERE type = :type AND field_progress <> :progress",
+  array(
+    ':type' => 'running_service', ':progress' => 100,
+  ));
+  dpm($result);
 }
